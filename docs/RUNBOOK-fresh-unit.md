@@ -171,3 +171,34 @@ action, so apps like Projectivy error out when opening "Android settings".
 Fix: build + install `tools/settings-shim` (`bash build.sh`, needs only the
 Android SDK - javac/d8/aapt2/apksigner). It registers the action and forwards
 to the TV settings root. One install, permanent.
+
+## 10. Optional: Settings tile and Wireless ADB
+
+Two home-screen apps, in addition to the shim above. `tools/settings-shim`
+is the invisible forwarder Projectivy calls. These two show up in the launcher.
+
+```bash
+adb install tools/settings-launcher/settings-launcher.apk
+adb install tools/adb-wifi/adb-wifi.apk
+adb shell pm grant com.visorcraft.adbwifi android.permission.WRITE_SECURE_SETTINGS
+```
+
+The APKs are already in the tree. `bash build.sh` in either directory rebuilds
+from source with the Android SDK (javac, d8, aapt2, apksigner) and signs with
+`~/.android/debug.keystore`. A rebuild on another machine uses that machine's
+debug key and will not upgrade the checked-in package in place.
+
+`WRITE_SECURE_SETTINGS` is not granted by the install. Without that grant the
+Wireless ADB tile toasts the exact `pm grant` command and does not change
+settings. After the grant, opening the tile sets `adb_enabled` and
+`adb_wifi_enabled` to 1 and toasts the current IPv4. `BootReceiver` does the
+same at boot, then once more 20 seconds later.
+
+Settings Launcher (`com.visorcraft.settingslauncher`, label **Settings**) tries
+`android.settings.SETTINGS`, then the TV settings launch intent, then
+`com.android.tv.settings/.MainSettings`.
+
+Both packages are already listed in `tools/lift-restricted.sh`. The copies
+installed on 2026-10-16 used a different key that was not kept, so installing
+these over those packages fails the signature check. Uninstall the old package
+first.

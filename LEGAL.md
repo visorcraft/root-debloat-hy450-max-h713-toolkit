@@ -32,6 +32,9 @@ your jurisdiction.
   `services.jar`). Every procedure here instructs you to extract the files
   from *your own device* and patch *your own copies*. Keep personal backups
   of your own device for your own use; do not upload them anywhere.
+  The two helper APKs in `tools/settings-launcher/` and `tools/adb-wifi/`
+  are original programs built from the source next to them. They are the
+  only APKs this repository tracks.
 - **No personal data.** Serial numbers, MAC addresses, and network
   identifiers from the development unit have been removed.
 

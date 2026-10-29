@@ -7,3 +7,7 @@ reference/
 *.idsig
 update.zip
 __pycache__/
+
+# Original helper apps from tools/*/build.sh. Not vendor firmware.
+!tools/settings-launcher/settings-launcher.apk
+!tools/adb-wifi/adb-wifi.apk

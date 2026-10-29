@@ -109,6 +109,11 @@ node; `backup/boot0.bin` came from the FEL-era dump work.
 - **`com.visorcraft.settingsshim`** installed: handles the generic
   android.settings.SETTINGS intent the OEM TvSettings never registered
   (Projectivy "Android settings" entry point). Source: tools/settings-shim/.
+- **`com.visorcraft.settingslauncher`** and **`com.visorcraft.adbwifi`**:
+  home-screen tiles (labels Settings and Wireless ADB). Source:
+  `tools/settings-launcher/` and `tools/adb-wifi/`. Wireless ADB needs
+  `pm grant com.visorcraft.adbwifi android.permission.WRITE_SECURE_SETTINGS`
+  once; its boot receiver then re-enables wireless adb. See the runbook.
 - Projectivy a11y: enabled + bound; enabled_accessibility_services must use
   the fully-qualified component form or the app misreports "Enabled: No".
 

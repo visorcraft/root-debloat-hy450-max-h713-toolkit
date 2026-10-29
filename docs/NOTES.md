@@ -301,6 +301,14 @@ reboot → persists, service bound. First boot after install is slower
    intent-filter that forwards to com.android.tv.settings/.MainSettings.
    Hand-built with SDK tools only (build.sh: javac+d8+aapt2+apksigner,
    no gradle). Verified: resolve-activity finds it, am start opens TvSettings.
+3. Launcher tiles rebuilt from the 2026-10-16 installs
+   (`com.visorcraft.settingslauncher`, `com.visorcraft.adbwifi`): source in
+   tools/settings-launcher and tools/adb-wifi, same SDK-only build.sh.
+   Behavior matches those installs: Settings tries the generic settings
+   action, then the TV settings launch intent, then MainSettings. Wireless
+   ADB writes adb_enabled + adb_wifi_enabled, toasts the IPv4, and retries
+   20s after BOOT_COMPLETED. The built APKs are checked in. Other *.apk
+   files stay gitignored. Signed with the local debug keystore.
 
 ### Privacy audit (2026-10-28)
 

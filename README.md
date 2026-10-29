@@ -103,6 +103,7 @@ python3 tools/fel_mmc.py restore
 - **🧯 A real recovery lane** - host-driven eMMC read/write over the BootROM FEL protocol, no device-side code needed. If it hangs at the logo, you can fix it.
 - **♿ Accessibility that sticks** - Magisk module fixing the OEM focus hook that silently killed accessibility services (e.g. Projectivy Launcher) on every app switch.
 - **⚙️ Settings shim** - restores the `android.settings.SETTINGS` entry point missing from the OEM TvSettings.
+- **📺 Settings tile & wireless ADB** - two home-screen apps so TV settings and wireless adb are one click away, and wireless adb comes back on at boot.
 - **🛡️ Privacy hardening** - private-DNS and AFWall+ blocklist policy, plus a privacy audit of what the stock firmware talks to.
 - **📚 Full forensics** - register maps, FEL wire-protocol quirks, GPT layout, hashes, and the incident log from a real un-brick.
 
@@ -125,6 +126,8 @@ python3 tools/fel_mmc.py restore
 | `tools/debloat1.sh` | Reversible debloat (12 OEM bloat/telemetry apps). |
 | `tools/lift-restricted.sh` | Lifts Android 13's "Restricted settings" block so sideloaded apps can use accessibility services / notification listeners. |
 | `tools/settings-shim/` | Tiny app (source + build script) that handles the missing `android.settings.SETTINGS` intent. |
+| `tools/settings-launcher/` | Home-screen **Settings** tile (`com.visorcraft.settingslauncher`). Opens TV settings. Source, `build.sh`, and `settings-launcher.apk`. |
+| `tools/adb-wifi/` | Home-screen **Wireless ADB** tile (`com.visorcraft.adbwifi`). Turns wireless adb on, and again 20s after boot. Source, `build.sh`, and `adb-wifi.apk`. |
 
 ---
 
@@ -154,10 +157,10 @@ boot-flow differences. Issues and PRs are open.
 
 Licensed under the **MIT License** - see [`LICENSE`](LICENSE) for the full text.
 
-© 2026 visorcraft. This repository contains only original documentation and
-original or permissively-usable source code. It intentionally ships **no**
-firmware dumps, no device-pulled binaries, and no pre-patched boot images -
-those are the vendor's copyrighted property and you must dump/patch your own
-unit (the runbook covers exactly how). See [`LEGAL.md`](LEGAL.md) for the
-lawful-use rationale. Not affiliated with or endorsed by Magcubic, Allwinner,
-Google, or any other vendor mentioned.
+© 2026 visorcraft. This repository contains original documentation, original
+source, and two small original helper APKs (Settings launcher and Wireless
+ADB). It ships **no** firmware dumps, no device-pulled binaries, and no
+pre-patched boot images - those are the vendor's copyrighted property and you
+must dump/patch your own unit (the runbook covers exactly how). See
+[`LEGAL.md`](LEGAL.md) for the lawful-use rationale. Not affiliated with or
+endorsed by Magcubic, Allwinner, Google, or any other vendor mentioned.
