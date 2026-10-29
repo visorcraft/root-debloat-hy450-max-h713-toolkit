@@ -1,0 +1,10 @@
+package:com.softwinner.update
+package:com.hy.storeos
+package:com.htc.clearmemory
+package:com.hy.hyotaupdate
+package:com.softwinner.miracastReceiver
+package:com.mobisystems.office
+package:com.htc.samescreen
+package:com.android.music
+package:com.htc.hyk_test
+package:com.htc.btremote.receiver

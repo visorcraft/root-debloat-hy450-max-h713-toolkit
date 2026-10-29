@@ -1,0 +1,9 @@
+# Never commit device dumps or vendor/proprietary binaries:
+backup/
+reference/
+*.img
+*.bin
+*.apk
+*.idsig
+update.zip
+__pycache__/
