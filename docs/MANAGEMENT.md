@@ -116,6 +116,46 @@ node; `backup/boot0.bin` came from the FEL-era dump work.
   once; its boot receiver then re-enables wireless adb. See the runbook.
 - Projectivy a11y: enabled + bound; enabled_accessibility_services must use
   the fully-qualified component form or the app misreports "Enabled: No".
+- **`tools/aurora-perms.sh`**: grants Aurora Store's Background Downloads
+  and App links. The in-app Grant buttons cannot succeed on this ROM.
+  Details in the section below.
+
+## Aurora Store grants the TV UI cannot finish
+
+Aurora's permission screen toasts "Required permissions were denied" when
+the Settings screen it opened comes back and the permission is still
+missing. Two rows on this ROM can never succeed from Grant. There is no
+phone Settings app. Run `tools/aurora-perms.sh` (no root) after installing
+Aurora, and again after a reinstall:
+
+```bash
+adb -s <ip>:5555 push tools/aurora-perms.sh /data/local/tmp/
+adb -s <ip>:5555 shell 'sh /data/local/tmp/aurora-perms.sh'
+```
+
+Reopen Aurora's permission screen. Background Downloads and App links show
+granted. The script is idempotent and survives reboot.
+
+| Row | What Grant opens | Why it fails | What Aurora checks | Command |
+|---|---|---|---|---|
+| Background Downloads | `android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` | `com.android.tv.settings/.EmptyStubActivity` finishes immediately | `PowerManager.isIgnoringBatteryOptimizations` | `cmd deviceidle whitelist +com.aurora.store` |
+| App links | `android.settings.APP_OPEN_BY_DEFAULT_SETTINGS` | no activity handles it | user selection `DOMAIN_STATE_SELECTED` for `play.google.com` and `market.android.com` | `pm set-app-links-user-selection --user 0 --package com.aurora.store true play.google.com market.android.com` |
+
+App links also needs link handling left on:
+`pm set-app-links-allowed --user 0 --package com.aurora.store true`.
+`pm set-app-links` (auto-verify state) does not satisfy Aurora's check.
+Confirm with `pm get-app-links --user 0 com.aurora.store`: both hosts under
+`Enabled:`.
+
+Installer permission and All-files access have real screens
+(`ExternalSourcesActivity`, `AllFilesAccessActivity`), so those Grant
+buttons can work from the remote.
+
+Same failure on another app: resolve the action it opens. `EmptyStubActivity`
+or "No activity found" means the UI cannot grant it. Doze whitelist is the
+same `cmd deviceidle` command with that package. For links, list hosts with
+`pm get-app-links --user 0 <pkg>`, then `pm set-app-links-user-selection`
+for those hosts.
 
 ## OTA updates (deliberately disabled)
 
@@ -166,7 +206,7 @@ during configuration.
 
 | App | Package | Version | Status |
 |---|---|---|---|
-| Aurora Store | com.aurora.store | 4.8.4 (F-Droid build) | installed; use anonymous login on first open |
+| Aurora Store | com.aurora.store | 4.8.4 (F-Droid build) | installed; anonymous login. Background downloads and App links granted via `tools/aurora-perms.sh` |
 | YouTube (Android TV) | com.google.android.youtube.tv | 7.28.300 | launches to main UI |
 | Netflix (Android TV) | com.netflix.ninja | 10.3.1 | launches; playback subject to DRM (below) |
 | Disney+ | com.disney.disneyplus | 26.19.0 | launches |

@@ -125,6 +125,7 @@ python3 tools/fel_mmc.py restore
 | `tools/fixpolicy.sh` | Authorizes adb shell in Magisk's policy DB. |
 | `tools/debloat1.sh` | Reversible debloat (12 OEM bloat/telemetry apps). |
 | `tools/lift-restricted.sh` | Lifts Android 13's "Restricted settings" block so sideloaded apps can use accessibility services / notification listeners. |
+| `tools/aurora-perms.sh` | Grants Aurora Store's Background Downloads and App links. This ROM's TvSettings stubs or omits those Settings screens, so the in-app Grant button always reports denied. |
 | `tools/settings-shim/` | Tiny app (source + build script) that handles the missing `android.settings.SETTINGS` intent. |
 | `tools/settings-launcher/` | Home-screen **Settings** tile (`com.visorcraft.settingslauncher`). Opens TV settings. Source, `build.sh`, and `settings-launcher.apk`. |
 | `tools/adb-wifi/` | Home-screen **Wireless ADB** tile (`com.visorcraft.adbwifi`). Turns wireless adb on, and again 20s after boot. Source, `build.sh`, and `adb-wifi.apk`. |

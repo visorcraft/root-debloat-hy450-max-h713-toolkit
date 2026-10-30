@@ -340,3 +340,62 @@ new code. Verdict: no eavesdropping path present or wired up.
    loop now satisfied. NOTE: storeos CheckUpdateService ~1/s start failures
    remain - caller unidentified (silent OEM retry loop), impact = logcat
    lines only, no network/CPU cost. Benign; left as-is.
+
+### Aurora Store "Required permissions were denied" (2026-10-28)
+
+Symptom: Aurora 4.8.4 permissions screen toasts "Required permissions were
+denied" on Grant for Background Downloads and for App links. Same toast
+(`R.string.permissions_denied`) for every row whose Settings screen returns
+without the check passing.
+
+There is no `com.android.settings` on this ROM. TvSettings either stubs the
+phone Settings intent or does not register it.
+
+**Background Downloads** is `PermissionType.DOZE_WHITELIST`. Grant launches
+`Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` for
+`package:com.aurora.store`. `cmd package resolve-activity` returns
+`com.android.tv.settings/.EmptyStubActivity` (intent-filter priority 1,
+scheme `package`). The stub finishes without calling
+`IDeviceIdleController.addPowerSaveWhitelistApp`. Aurora then checks
+`PowerManager.isIgnoringBatteryOptimizations`.
+`IGNORE_BATTERY_OPTIMIZATION_SETTINGS` is the same stub.
+
+Fix: `cmd deviceidle whitelist +com.aurora.store` (shell, no root).
+Verified: `user,com.aurora.store,10100` and `/data/system/deviceidle.xml`
+contains `<wl n="com.aurora.store" />`. Same user whitelist already used
+for Projectivy and Sinema. Uninstall drops the entry.
+
+**App links** is `PermissionType.APP_LINKS`. Grant launches
+`Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS` with the same package URI.
+`cmd package resolve-activity` returns no activity. Aurora's check
+(`Context.isDomainVerified`) is user selection, not auto-verify:
+
+```
+domainMap.values.first() == DomainVerificationUserState.DOMAIN_STATE_SELECTED
+```
+
+for both `play.google.com` and `market.android.com`. Before the fix,
+`pm get-app-links --user 0 com.aurora.store` showed both hosts under
+`Selection state / Disabled`. `STATE_APPROVED` from `pm set-app-links`
+would record verification state, which this check does not accept.
+
+Fix (shell, no root):
+
+```
+pm set-app-links-user-selection --user 0 --package com.aurora.store true \
+  play.google.com market.android.com
+pm set-app-links-allowed --user 0 --package com.aurora.store true
+```
+
+Verified after: both hosts under `Selection state / Enabled`, and
+`Verification link handling allowed: true`. Enabled user selection is
+`DOMAIN_STATE_SELECTED`. Link-handling allowed must stay true or the
+platform reports the hosts as not selected.
+
+Installer permission resolves to
+`com.android.tv.settings/.device.apps.specialaccess.ExternalSourcesActivity`.
+All-files access resolves to `AllFilesAccessActivity`. Those two Grant
+buttons have a real screen.
+
+Script for the two broken rows: `tools/aurora-perms.sh`. For another
+package, same commands; list its hosts with `pm get-app-links --user 0 <pkg>`.

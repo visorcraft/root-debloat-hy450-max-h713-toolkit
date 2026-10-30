@@ -127,6 +127,48 @@ adb -s <ip>:5555 shell 'appops set <package> ACCESS_RESTRICTED_SETTINGS allow'
 or lift it for all user-installed apps with `tools/lift-restricted.sh`
 (edit its list first). Then the Settings toggle works normally.
 
+## 7b. Aurora Store Grant buttons say permissions were denied
+
+Two permission rows cannot be granted from the UI on this ROM. Both toast
+"Required permissions were denied". After installing Aurora Store:
+
+```bash
+adb -s <ip>:5555 push tools/aurora-perms.sh /data/local/tmp/
+adb -s <ip>:5555 shell 'sh /data/local/tmp/aurora-perms.sh'
+```
+
+Expect `user,com.aurora.store,<uid>`, then both hosts under `Enabled:`,
+then `ok`. No root. Survives reboot. Re-run after a reinstall. Reopen
+Aurora's permission screen; Background Downloads and App links show granted.
+
+What the script does, if you need to do it by hand or for another package:
+
+- **Background Downloads.** Grant opens
+  `android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`. TvSettings
+  answers with `EmptyStubActivity`, which finishes without whitelisting.
+  Aurora checks `PowerManager.isIgnoringBatteryOptimizations`.
+  `cmd deviceidle whitelist +com.aurora.store`
+- **App links.** Grant opens
+  `android.settings.APP_OPEN_BY_DEFAULT_SETTINGS`. No activity handles it.
+  Aurora requires user selection (`DOMAIN_STATE_SELECTED`, not auto-verify)
+  for `play.google.com` and `market.android.com`.
+  `pm set-app-links-user-selection --user 0 --package com.aurora.store true play.google.com market.android.com`
+  and `pm set-app-links-allowed --user 0 --package com.aurora.store true`
+
+Installer permission and All-files access do have real TvSettings screens
+(`ExternalSourcesActivity`, `AllFilesAccessActivity`). To see why some other
+app's Grant button failed:
+
+```bash
+adb shell cmd package resolve-activity \
+  -a android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS \
+  -c android.intent.category.DEFAULT -d package:<pkg>
+```
+
+`EmptyStubActivity` or "No activity found" means the UI cannot grant it.
+Same two `cmd`/`pm` forms, with that package's own hosts from
+`pm get-app-links --user 0 <pkg>`.
+
 ## Never-do list (bricking causes, proven the hard way)
 
 1. Never raw-write env_a/env_b without a valid env CRC32 (format: CRC32 +
