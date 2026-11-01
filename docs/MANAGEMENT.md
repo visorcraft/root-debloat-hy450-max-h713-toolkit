@@ -114,6 +114,11 @@ node; `backup/boot0.bin` came from the FEL-era dump work.
   `tools/settings-launcher/` and `tools/adb-wifi/`. Wireless ADB needs
   `pm grant com.visorcraft.adbwifi android.permission.WRITE_SECURE_SETTINGS`
   once; its boot receiver then re-enables wireless adb. See the runbook.
+- **[HY450 Control](https://github.com/visorcraft/HY450-Control)** is a separate
+  GPL-3.0-only Magisk utility for picture/audio/input controls, projection
+  backup, calibration, presets, overlay, and automation. Signed APK releases
+  and source are in that repository. Its module ID is `hy450control`; disable
+  it along with other custom modules before any hypothetical OTA.
 - Projectivy a11y: enabled + bound; enabled_accessibility_services must use
   the fully-qualified component form or the app misreports "Enabled: No".
 - **`tools/aurora-perms.sh`**: grants Aurora Store's Background Downloads

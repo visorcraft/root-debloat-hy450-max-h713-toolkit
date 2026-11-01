@@ -244,3 +244,19 @@ Both packages are already listed in `tools/lift-restricted.sh`. The copies
 installed on 2026-10-16 used a different key that was not kept, so installing
 these over those packages fails the signature check. Uninstall the old package
 first.
+
+## 11. Optional: HY450 Control
+
+[HY450 Control](https://github.com/visorcraft/HY450-Control) is the companion
+control panel for this projector: live picture/audio/input controls, projection
+backup/restore, calibration patterns, presets, a quick overlay, startup-app
+selection, and a sleep timer.
+
+Download the signed APK and checksum from its
+[GitHub Releases page](https://github.com/visorcraft/HY450-Control/releases/latest),
+then follow the repository's module-install instructions. Installation requires
+a reboot. Save original values before changing hardware controls.
+
+Remote-button remapping is not supported because the OEM consumes Menu/Guide;
+boot-default input is read-only because the firmware exposes no setter. The app
+does not change streaming DRM or certifications.

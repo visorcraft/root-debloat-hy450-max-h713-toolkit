@@ -104,6 +104,7 @@ python3 tools/fel_mmc.py restore
 - **♿ Accessibility that sticks** - Magisk module fixing the OEM focus hook that silently killed accessibility services (e.g. Projectivy Launcher) on every app switch.
 - **⚙️ Settings shim** - restores the `android.settings.SETTINGS` entry point missing from the OEM TvSettings.
 - **📺 Settings tile & wireless ADB** - two home-screen apps so TV settings and wireless adb are one click away, and wireless adb comes back on at boot.
+- **🎛️ [HY450 Control](https://github.com/visorcraft/HY450-Control)** - a separate privileged control panel with live picture/audio/input controls, projection backup, calibration patterns, named presets, a quick overlay, startup-app selection, and a sleep timer.
 - **🛡️ Privacy hardening** - private-DNS and AFWall+ blocklist policy, plus a privacy audit of what the stock firmware talks to.
 - **📚 Full forensics** - register maps, FEL wire-protocol quirks, GPT layout, hashes, and the incident log from a real un-brick.
 
@@ -129,6 +130,7 @@ python3 tools/fel_mmc.py restore
 | `tools/settings-shim/` | Tiny app (source + build script) that handles the missing `android.settings.SETTINGS` intent. |
 | `tools/settings-launcher/` | Home-screen **Settings** tile (`com.visorcraft.settingslauncher`). Opens TV settings. Source, `build.sh`, and `settings-launcher.apk`. |
 | `tools/adb-wifi/` | Home-screen **Wireless ADB** tile (`com.visorcraft.adbwifi`). Turns wireless adb on, and again 20s after boot. Source, `build.sh`, and `adb-wifi.apk`. |
+| [**HY450 Control**](https://github.com/visorcraft/HY450-Control) | Separate GPL-3.0-only privileged control app with signed APK releases, full source, and reversible Magisk installation. |
 
 ---
 
