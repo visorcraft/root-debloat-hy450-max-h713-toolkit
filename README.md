@@ -104,7 +104,7 @@ python3 tools/fel_mmc.py restore
 - **♿ Accessibility that sticks** - Magisk module fixing the OEM focus hook that silently killed accessibility services (e.g. Projectivy Launcher) on every app switch.
 - **⚙️ Settings shim** - restores the `android.settings.SETTINGS` entry point missing from the OEM TvSettings.
 - **📺 Settings tile & wireless ADB** - two home-screen apps so TV settings and wireless adb are one click away, and wireless adb comes back on at boot.
-- **🎛️ [HY450 Control](https://github.com/visorcraft/HY450-Control)** - a separate privileged control panel with the graphite-and-cyan Signal Console interface, live picture/audio/input controls, projection backup, calibration patterns, named presets, a quick overlay, startup-app selection, and a sleep timer.
+- **🎛️ [HY450 Control](https://github.com/visorcraft/HY450-Control)** - a separate privileged control panel with the graphite-and-cyan Signal Console interface, live picture/audio/input controls, projection backup, calibration patterns, family presets, a quick overlay, startup-app selection, and a sleep timer.
 - **🛡️ Privacy hardening** - private-DNS and AFWall+ blocklist policy, plus a privacy audit of what the stock firmware talks to.
 - **📚 Full forensics** - register maps, FEL wire-protocol quirks, GPT layout, hashes, and the incident log from a real un-brick.
 
